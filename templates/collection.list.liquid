@@ -1,4 +1,4 @@
-<div id="collection-list">
+<div id="collection-list" v-pre>
   {% paginate collection.products by 2 %}
     <h1>{{ collection.title }}</h1>
     {% for product in collection.products %}
@@ -17,12 +17,14 @@
   {% endpaginate %}
 </div>
 
-<script>
-  const vm = new Vue({
-      el: '#collection-list',
-      vuetify: new Vuetify(),
-      delimiters: ['${', '}'],
-  })
+<script type="module">
+  import { createApp } from 'vue'
 
-  console.log(vm)
+  createApp({
+    delimiters: ['${', '}'],
+    data: () => ({
+      teste: 'teste........'
+    }),
+  })
+  .mount("#collection-list")
 </script>
