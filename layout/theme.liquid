@@ -38,7 +38,7 @@
         state () {
           return {
             header: "Vuex",
-            // product: {},
+            product: {},
             cart: {
               products: [],
               freight: 0,
@@ -71,12 +71,42 @@
               header: payload,
             })
           },
-          addProductToCart({state, commit}, variant_id) {
-
+          setProduct({commit}, product_handle) {
+            axios.get(
+              `/products/${product_handle}.js`
+            )
+            .then((response) => {
+              console.log("setProduct - response", response.data)
+              // this.productData = response.data;
+              commit('SET_STATE', {
+                product: response.data,
+              })
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+          },
+          addProductToCart({state, commit}, payload) {
+            let { variant_id, quantity } = payload;
+            let data = {
+              id: variant_id,
+              quantity: quantity,
+            }
+            axios.post(
+              '/cart/add.js',
+              data
+            )
+            .then((response) => {
+              console.log("addProductToCart - response", response)
+            })
+            .catch((error) => {
+              console.error(error)
+            })
           },
         },
         getters: {
           getHeader: state => state.header,
+          getProduct: state => state.product,
         }
       })
       // console.log("store", store)

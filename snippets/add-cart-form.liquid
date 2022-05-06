@@ -20,8 +20,10 @@
       {{ current_variant.price | money }}
       <label for="Quantity">quantity</label>
       <input type="number" id="Quantity" name="quantity" value="1" min="1">
-      <button type="submit" name="add" id="AddToCart">Add to cart</button>
+      <button @click="onAddToCart" type="submit" name="add" id="AddToCart">Add to cart</button>
   </form>
+
+  ${getProduct}
 
 </div>
 
@@ -41,8 +43,16 @@
       }),
       methods: {
         ...mapActions([
-          
+          "setProduct",
+          "addProductToCart",
         ]),
+        onAddToCart(event) {
+          event.preventDefault();
+          this.addProductToCart({
+            variant_id: this.getProduct.variants[0].id,
+            quantity: 1,
+          })
+        }
         // addToCart(event) {
         //   event.preventDefault();
           
@@ -61,9 +71,11 @@
       computed: {
         ...mapGetters([
           "getHeader",
+          "getProduct",
         ])
       },
       created() {
+        this.setProduct("{{ product.handle }}")
         // axios.get(
         //   '/products/{{ product.handle }}.js'
         // )
