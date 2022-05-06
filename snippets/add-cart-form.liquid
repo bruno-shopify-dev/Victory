@@ -45,13 +45,15 @@
         ...mapActions([
           "setProduct",
           "addProductToCart",
+          "setCartProducts",
         ]),
         onAddToCart(event) {
           event.preventDefault();
-          this.addProductToCart({
+          await this.addProductToCart({
             variant_id: this.getProduct.variants[0].id,
             quantity: 1,
           })
+          await this.setCartProducts()
         }
         // addToCart(event) {
         //   event.preventDefault();

@@ -42,7 +42,7 @@
             cart: {
               products: [],
               freight: 0,
-              total: 0,
+              item_count: 0,
               discount: 0,
               quantity: 0,
             },
@@ -86,6 +86,22 @@
               console.error(error)
             })
           },
+          setCartProducts({commit}) {
+            axios.get(
+              `/cart.js`
+            )
+            .then((response) => {
+              console.log("setCartProducts - response", response.data)
+              // this.productData = response.data;
+              commit('SET_STATE', {
+                "cart.products": response.data.items,
+                "cart.item_count": response.data.item_count,
+              })
+            })
+            .catch((error) => {
+              console.error(error)
+            })
+          },
           addProductToCart({state, commit}, payload) {
             let { variant_id, quantity } = payload;
             let data = {
@@ -107,6 +123,7 @@
         getters: {
           getHeader: state => state.header,
           getProduct: state => state.product,
+          getItemCountCart: state => state.cart.item_count,
         }
       })
       // console.log("store", store)
@@ -128,9 +145,18 @@
           </div>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <!-- <div style="float: right;width: 50px;display: block;"> -->
-          <a href="#" data-target="menu-right" style="float: right;width: 50px;display: block;height: 100%;display: flex;justify-content: center;align-items: center;margin: 0 !important;">
+          <!-- <a href="#" data-target="menu-right" style="float: right;width: 50px;display: block;height: 100%;display: flex;justify-content: center;align-items: center;margin: 0 !important;">
             <i class="material-icons">shopping_cart</i>
-          </a>
+          </a> -->
+          <div style="float:right;height: 100%;display: flex;justify-content: center;align-items: center;margin-right: 3px;margin-left: 10px;position: relative;">
+            <span style="position: absolute;z-index: 2;display: flex;background-color: red;width: 25px;height: 25px;justify-content: center;align-items: center;border-radius: 15px;font-weight: bold;top: 0;right: 0;color: black;">${getItemCountCart}</span>
+            <a v-if="getItemCountCart <= 0" href="#" class="btn-floating btn-large" style="margin: 0 !important;background-color: green;">
+              <i class="material-icons" style="color: white;">shopping_cart</i>
+            </a>
+            <a v-else href="#" class="btn-floating btn-large pulse" style="margin: 0 !important;background-color: green;">
+              <i class="material-icons" style="color: white;">shopping_cart</i>
+            </a>
+          </div>
           <!-- </div> -->
           <ul class="right hide-on-med-and-down">
             <!-- <li><a href="sass.html">Sass</a></li>
@@ -231,17 +257,28 @@
       createApp({
         delimiters: ['${', '}'],
         data: () => ({
-          header: "Cabeçalho"
+          header: "Cabeçalho",
+          class_badge_cart: "btn-floating btn-large",
         }),
         methods: {
           ...mapActions([
             "setHeader",
+            "setCartProducts",
           ]),
         },
         computed: {
           ...mapGetters([
             "getHeader",
+            "getItemCountCart",
           ])
+        },
+        async created() {
+          await this.setCartProducts()
+          // if (this.getItemCountCart <= 0) {
+          //   this.class_badge_cart = "btn-floating btn-large";
+          // } else {
+          //   this.class_badge_cart = "btn-floating btn-large pulse";
+          // }
         },
       })
       .use(store)
