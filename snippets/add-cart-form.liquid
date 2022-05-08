@@ -1,4 +1,4 @@
-<div id="AddToCartForm">
+<div id="AddToCartForm" v-pre>
   <form 
     action="/cart/add" 
     method="post" 
@@ -47,28 +47,14 @@
           "addProductToCart",
           "setCartProducts",
         ]),
-        onAddToCart(event) {
+        async onAddToCart(event) {
           event.preventDefault();
           await this.addProductToCart({
             variant_id: this.getProduct.variants[0].id,
             quantity: 1,
           })
           await this.setCartProducts()
-        }
-        // addToCart(event) {
-        //   event.preventDefault();
-          
-        //   axios.post(
-        //     '/cart/add.js',
-        //     data
-        //   )
-        //   .then((response) => {
-        //     console.log("addToCart - response", response)
-        //   })
-        //   .catch((error) => {
-        //     console.error(error)
-        //   })
-        // },
+        },
       },
       computed: {
         ...mapGetters([
@@ -78,16 +64,6 @@
       },
       created() {
         this.setProduct("{{ product.handle }}")
-        // axios.get(
-        //   '/products/{{ product.handle }}.js'
-        // )
-        // .then((response) => {
-        //   console.log("created - response", response.data)
-        //   this.productData = response.data;
-        // })
-        // .catch((error) => {
-        //   console.error(error)
-        // })
       },
     })
     .use(store)

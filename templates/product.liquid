@@ -2,8 +2,89 @@
   {% assign current_variant = product.selected_or_first_available_variant %}
   {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
   
-  <div class="product-template container">
-    <!-- ${teste} -->
+  <!-- <div class="container-breadcrumbs">
+    <nav>
+      <div class="nav-wrapper">
+        <div class="col s12">
+          <a href="#!" class="breadcrumb">First</a>
+          <a href="#!" class="breadcrumb">Second</a>
+          <a href="#!" class="breadcrumb">Third</a>
+        </div>
+      </div>
+    </nav>
+  </div> -->
+
+  <div class="row">
+    <div class="col s12 l7">
+      <div class="container-product-images">
+        
+        <section
+          id="product_images"
+          class="splide"
+          aria-label="The carousel with thumbnails. Selecting a thumbnail will change the Beautiful Gallery carousel."
+        >
+          <div class="splide__track">
+            <ul class="splide__list">
+              <li 
+                class="splide__slide"
+                v-for="(media, index) in getProductMedia"
+                :index="index"
+              >
+                <img 
+                  :src="media.src" 
+                  :alt="media.alt"
+                  >
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section
+          id="product_images_thumbnail"
+          class="splide"
+          aria-label="The carousel with thumbnails. Selecting a thumbnail will change the Beautiful Gallery carousel."
+        >
+          <div class="splide__track">
+            <ul class="splide__list">
+              <li 
+                class="splide__slide"
+                v-for="(media, index) in getProductMedia"
+                :index="index"
+              >
+                <img 
+                  :src="media.src" 
+                  :alt="media.alt"
+                  >
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  
+    <div class="col s12 l5">
+      <div class="container-product-info">
+        <div class="col s12">
+          <h1 class="title">
+            {{ product.title }}
+          </h1>
+        </div>
+        <div class="col s12">
+          <div style="padding: 8px 0;">
+            Estrelas das avaliações....
+          </div>
+        </div>
+        <div class="col s12">
+          <div ref="price_product">
+            R$ 0,00
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="product-template container">
+
     <div class="product-images">
       <img 
         src="{{ featured_image | img_url: 'large' }}" 
@@ -20,26 +101,54 @@
         </a>
       {% endfor %}
     </div>
-  
+
     <div class="product-description-container">
       <div class="product-title">
         <h1>{{ product.title }}</h1>
       </div>
-  
-      <div class="product-bottom">
-        <div class="product-description">
-          {{ product.description }}
-        </div>
-      </div>
 
-      {% render 'add-cart-form' %}
+      <div class="product-cart">
+        <form 
+          action="/cart/add" 
+          method="post" 
+          enctype="multipart/form-data" 
+          >
+            <select name="id" id="productSelect">
+              {% for variant in product.variants %}
+                {% if variant.available %}
+                  <option value="{{ variant.id }}">
+                    {{ variant.title }} - {{ variant.price | money_with_currency }}
+                  </option>
+                {% else %}
+                  <option disabled="disabled">
+                    {{ variant.title }} - sold out
+                  </option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            {{ current_variant.price | money }}
+            <label for="Quantity">quantity</label>
+            <input type="number" id="Quantity" name="quantity" value="1" min="1">
+            <button @click="onAddToCart" type="submit" name="add" id="AddToCart">Add to cart</button>
+        </form>
+      </div>
     </div>
-  </div>
+
+    <ul class="collapsible">
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add</i>Descrição</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add</i>Avaliações</div>
+        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+      </li>
+    </ul>
+  
+  </div> -->
 </div>
 
-<!-- {% render 'add-cart-form' %} -->
-
-<!-- <script type='text/javascript'>
+<script type='text/javascript'>
   $(document).ready(function() {
 
     const { createApp } = Vue
@@ -48,20 +157,170 @@
       mapGetters 
     } = Vuex;
 
+    // const testeComponent = {
+    //   template: "<div>${teste}</div>",
+    //   delimiters: ['${', '}'],
+    //   data: () => ({
+    //     teste: 'Isso aqui é um teste'
+    //   })
+    // };
+
     createApp({
+      // components: {
+      //   "teste": testeComponent,
+      // },
       delimiters: ['${', '}'],
       data: () => ({
-        header: "Cabeçalho"
+        header: "Cabeçalho",
+        productImageInstance: null,
+        productThumbnailImageInstance: null,
+        eventLoop: null,
+        eventTime: 5000,
+        hibernateEventMain: null,
+        hibernateEventThumbnail: null,
       }),
       computed: {
         ...mapGetters([
           "getHeader",
+          // "getProduct",
+          "getProductPrice",
+          "getProductMedia",
         ])
       },
-      methods:
+      methods: {
+        ...mapActions([
+          "setProduct",
+        ]),
+        async onAddToCart(event) {
+          event.preventDefault();
+          console.log("onAddToCart.....")
+          // await this.addProductToCart({
+          //   variant_id: this.getProduct.variants[0].id,
+          //   quantity: 1,
+          // })
+          // await this.setCartProducts()
+        },
+        setEventLoop() {
+          this.stopEventLoop()
+          this.eventLoop = setInterval(
+            () => {
+              let nextEl = $("#product_images_thumbnail .splide__slide.is-active").next();
+              if (nextEl.is('.is-next')) {
+                // nextEl.click();
+                this.productThumbnailImageInstance.go('>')
+              } else {
+                this.productThumbnailImageInstance.go(0)
+              }
+            },
+            this.eventTime
+          )
+        },
+        stopEventLoop() {
+          clearInterval(this.eventLoop)
+        },
+        setHibernateEventMain() {
+          this.stopEventLoop();
+          this.stopHibernateEventMain();
+          this.hibernateEventMain = setTimeout(
+            () => {
+              this.setEventLoop();
+            },
+            this.eventTime
+          );
+        },
+        stopHibernateEventMain() {
+          clearTimeout(this.hibernateEventMain)
+        },
+        setHibernateEventThumbnail() {
+          this.stopEventLoop();
+          this.stopHibernateEventThumbnail();
+          this.hibernateEventThumbnail = setTimeout(
+            () => {
+              this.setEventLoop();
+            },
+            this.eventTime
+          );
+        },
+        stopHibernateEventThumbnail() {
+          clearTimeout(this.hibernateEventThumbnail)
+        },
+        setHibernateEventAll() {
+          this.setHibernateEventMain();
+          this.setHibernateEventThumbnail();
+        },
+      },
+      async created() {
+        await this.setProduct("{{ product.handle }}")
+      },
+      watch: {
+        getProductPrice(newValue) {
+          this.$refs.price_product.innerHTML = formatCurrency(newValue);
+        },
+        getProductMedia(newValue) {
+          this.$nextTick(
+            () => {
+              if (this.productImageInstance) {
+                this.productImageInstance.destroy();
+              }
+              if (this.productThumbnailImageInstance) {
+                this.productThumbnailImageInstance.destroy();
+              }
+              this.productImageInstance = new Splide('#product_images', {
+                type      : 'fade',
+                rewind    : true,
+                pagination: false,
+                arrows    : false,
+                heightRatio: 1,
+                // autoplay: true,
+                
+              });
+              this.productThumbnailImageInstance = new Splide('#product_images_thumbnail', {
+                fixedWidth  : 100,
+                fixedHeight : 60,
+                gap         : 10,
+                rewind      : true,
+                pagination  : false,
+                isNavigation: true,
+                // autoplay: true,
+                focus      : 'center',
+                breakpoints: {
+                  600: {
+                    fixedWidth : 60,
+                    fixedHeight: 44,
+                  },
+                },
+              })
+              this.productImageInstance.sync(this.productThumbnailImageInstance);
+              this.productImageInstance.mount();
+              this.productThumbnailImageInstance.mount();
+              this.productImageInstance.on('drag', () => {
+                this.setHibernateEventAll()
+              })
+              this.productImageInstance.on('click', () => {
+                this.setHibernateEventAll()
+              })
+              // // -------------------------------------------
+              this.productThumbnailImageInstance.on('drag', () => {
+                this.setHibernateEventAll();
+              })
+              this.productThumbnailImageInstance.on('click', () => {
+                this.setHibernateEventAll();
+              })
+              $("#product_images_thumbnail button").on(
+                "click", 
+                () => {
+                  this.setHibernateEventAll();
+                }
+              )
+              // Ativar evento para passar o slide
+              this.setEventLoop();
+            }
+          )
+        },
+      }
     })
     .use(store)
     .mount("#product")
 
   });
-</script> -->
+</script>

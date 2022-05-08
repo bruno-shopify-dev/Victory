@@ -31,6 +31,16 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- ./Materialize -->
+    {{ 'splide-core.min.css' | asset_url | stylesheet_tag }}
+    {{ 'splide.min.css' | asset_url | stylesheet_tag }}
+    {{ 'splide.min.js' | asset_url | script_tag }}
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/css/splide.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/js/splide.min.js"></script> -->
+    <script type='text/javascript'>
+      function formatCurrency(value, fractionDigits = 2) {
+          return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: fractionDigits }).format(value);
+      }
+    </script>
     <script type='text/javascript'>
       // console.log("Vue", Vue)
       // console.log("Vuex", Vuex)
@@ -38,13 +48,26 @@
         state () {
           return {
             header: "Vuex",
-            product: {},
+            product: {
+              open: false,
+              variants: [],
+              options: [],
+              media: [],
+              media_ids: [],
+              title: '',
+              price: 0,
+              price_compare: 0,
+            },
+            form: {
+              selections: [],
+              options: [],
+            },
             cart: {
               products: [],
-              freight: 0,
+              // freight:    0,
               item_count: 0,
-              discount: 0,
-              quantity: 0,
+              // discount:   0,
+              total_price:   0,
             },
           }
         },
@@ -72,19 +95,45 @@
             })
           },
           setProduct({commit}, product_handle) {
-            axios.get(
-              `/products/${product_handle}.js`
+            return new Promise(
+              async (resolve, reject) => {
+                try {
+                  let response = await axios.get(`/products/${product_handle}.js`)
+                  let product = response.data;
+                  let media = [];
+                  let media_ids = [];
+                  product.media.forEach(
+                    (m) => {
+                      if (media_ids.includes(m.id)) return;
+                      media.push(m);
+                      media_ids.push(m.id);
+                    }
+                  );
+                  if (product.hasOwnProperty('variants')) {
+                    product.variants.forEach(
+                      (v) => {
+                        let m = v.featured_media;
+                        if (media_ids.includes(m.id)) return;
+                        media.push(m);
+                        media_ids.push(m.id);
+                      }
+                    );
+                  }
+                  console.log("setProduct - response", product)
+                  commit('SET_STATE', {
+                    "product.media": media,
+                    "product.media_ids": media_ids,
+                    "product.options": product.options,
+                    "product.title": product.title,
+                    "product.price": product.price,
+                    "product.price_compare": product.compare_at_price,
+                  })
+                  resolve(true)
+                } catch (error) {
+                  reject(error)
+                }
+              }
             )
-            .then((response) => {
-              console.log("setProduct - response", response.data)
-              // this.productData = response.data;
-              commit('SET_STATE', {
-                product: response.data,
-              })
-            })
-            .catch((error) => {
-              console.error(error)
-            })
           },
           setCartProducts({commit}) {
             axios.get(
@@ -96,6 +145,7 @@
               commit('SET_STATE', {
                 "cart.products": response.data.items,
                 "cart.item_count": response.data.item_count,
+                "cart.total_price": response.data.total_price,
               })
             })
             .catch((error) => {
@@ -122,8 +172,16 @@
         },
         getters: {
           getHeader: state => state.header,
-          getProduct: state => state.product,
+          // getProduct: state => state.product,
+          // -----------------------------------------------------
+          // Cart
           getItemCountCart: state => state.cart.item_count,
+          getItemCountCart: state => state.cart.item_count,
+          getTotalPriceCart: state => state.cart.total_price,
+          // -----------------------------------------------------
+          // Product
+          getProductPrice: state => state.product.price,
+          getProductMedia: state => state.product.media,
         }
       })
       // console.log("store", store)
@@ -131,6 +189,7 @@
   <!-- ./Scripts -->
 
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  {{ 'application.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }} <!-- Header hook for plugins -->
   <!-- {{ 'application.css' | asset_url | stylesheet_tag }} -->
 </head>
@@ -141,21 +200,30 @@
       <nav>
         <div class="nav-wrapper">
           <div class="brand-logo">
-            <a href="#!" style="width:100%;height:100%;">${getHeader}</a>
+            <a href="#!" style="width:100%;height:100%;">Logo</a>
           </div>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <!-- <div style="float: right;width: 50px;display: block;"> -->
           <!-- <a href="#" data-target="menu-right" style="float: right;width: 50px;display: block;height: 100%;display: flex;justify-content: center;align-items: center;margin: 0 !important;">
             <i class="material-icons">shopping_cart</i>
           </a> -->
-          <div style="float:right;height: 100%;display: flex;justify-content: center;align-items: center;margin-right: 3px;margin-left: 10px;position: relative;">
-            <span style="position: absolute;z-index: 2;display: flex;background-color: red;width: 25px;height: 25px;justify-content: center;align-items: center;border-radius: 15px;font-weight: bold;top: 0;right: 0;color: black;">${getItemCountCart}</span>
-            <a v-if="getItemCountCart <= 0" href="#" class="btn-floating btn-large" style="margin: 0 !important;background-color: green;">
+          <div class="container-cart-button">
+            <!-- <span style="position: absolute;z-index: 2;display: flex;background-color: red;width: 25px;height: 25px;justify-content: center;align-items: center;border-radius: 15px;font-weight: bold;top: 0;right: 0;color: black;">${getItemCountCart}</span> -->
+            
+            <div>
+              <a href="/cart" class="btn-floating btn-large container-cart-link z-depth-1">
+                <div class="container-cart-info">
+                  <span ref="item_count" style="font-weight: bold;">0 Item</span>
+                  <span ref="total_price" style="font-weight: bold;">R$ 0,00</span>
+                </div>
+                <div class="container-cart-icon">
+                  <i class="material-icons">shopping_cart</i>
+                </div>
+              </a>
+            </div>
+            <!-- <a v-else href="#" class="btn-floating btn-large pulse" style="margin: 0 !important;background-color: green;">
               <i class="material-icons" style="color: white;">shopping_cart</i>
-            </a>
-            <a v-else href="#" class="btn-floating btn-large pulse" style="margin: 0 !important;background-color: green;">
-              <i class="material-icons" style="color: white;">shopping_cart</i>
-            </a>
+            </a> -->
           </div>
           <!-- </div> -->
           <ul class="right hide-on-med-and-down">
@@ -258,7 +326,6 @@
         delimiters: ['${', '}'],
         data: () => ({
           header: "Cabeçalho",
-          class_badge_cart: "btn-floating btn-large",
         }),
         methods: {
           ...mapActions([
@@ -270,15 +337,25 @@
           ...mapGetters([
             "getHeader",
             "getItemCountCart",
+            "getTotalPriceCart",
           ])
+        },
+        watch: {
+          getItemCountCart(newValue) {
+            if (newValue == 1) {
+              this.$refs.item_count.innerHTML = "1 Item"
+            } else if (newValue > 1) {
+              this.$refs.item_count.innerHTML = `${newValue} Itens`
+            } else {
+              this.$refs.item_count.innerHTML = '0 Item'
+            }
+          },
+          getTotalPriceCart(newValue) {
+            this.$refs.total_price.innerHTML = formatCurrency(newValue);
+          },
         },
         async created() {
           await this.setCartProducts()
-          // if (this.getItemCountCart <= 0) {
-          //   this.class_badge_cart = "btn-floating btn-large";
-          // } else {
-          //   this.class_badge_cart = "btn-floating btn-large pulse";
-          // }
         },
       })
       .use(store)
