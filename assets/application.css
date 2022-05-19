@@ -45,6 +45,10 @@ body {
     position: relative;
 }
 
+.mb-15 {
+    margin-bottom: 15px !important;
+}
+
 /****************************************************** 
     Scroll to top 
 */
