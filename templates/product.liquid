@@ -1,87 +1,168 @@
-<div id="product">
+<div class="row" id="product">
   {% assign current_variant = product.selected_or_first_available_variant %}
   {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
-  
-  <!-- <div class="container-breadcrumbs">
-    <nav>
-      <div class="nav-wrapper">
-        <div class="col s12">
-          <a href="#!" class="breadcrumb">First</a>
-          <a href="#!" class="breadcrumb">Second</a>
-          <a href="#!" class="breadcrumb">Third</a>
-        </div>
-      </div>
-    </nav>
-  </div> -->
 
-  <div class="row">
-    <div class="col s12 l7">
-      <div class="container-product-images">
-        
-        <section
-          id="product_images"
-          class="splide"
-          aria-label="The carousel with thumbnails. Selecting a thumbnail will change the Beautiful Gallery carousel."
-        >
-          <div class="splide__track">
-            <ul class="splide__list">
-              <li 
-                class="splide__slide"
-                v-for="(media, index) in getProductMedia"
-                :index="index"
-              >
-                <img 
-                  :src="media.src" 
-                  :alt="media.alt"
-                  >
-              </li>
-            </ul>
+  <div class="col s12 l6 left-container">
+    <div class="container-slider">
+      <div
+        id="product-images"
+        style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+        class="swiper"
+      >
+        <div class="swiper-wrapper">
+          <div 
+            class="swiper-slide"
+            v-for="(media, index) in getProductMedia"
+          >
+            <img 
+              :src="media.src" 
+              :alt="media.alt"
+            />
           </div>
-        </section>
-
-        <section
-          id="product_images_thumbnail"
-          class="splide"
-          aria-label="The carousel with thumbnails. Selecting a thumbnail will change the Beautiful Gallery carousel."
-        >
-          <div class="splide__track">
-            <ul class="splide__list">
-              <li 
-                class="splide__slide"
-                v-for="(media, index) in getProductMedia"
-                :index="index"
-              >
-                <img 
-                  :src="media.src" 
-                  :alt="media.alt"
-                  >
-              </li>
-            </ul>
-          </div>
-        </section>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
       </div>
-    </div>
-  
-    <div class="col s12 l5">
-      <div class="container-product-info">
-        <div class="col s12">
-          <h1 class="title">
-            {{ product.title }}
-          </h1>
-        </div>
-        <div class="col s12">
-          <div style="padding: 8px 0;">
-            Estrelas das avaliações....
-          </div>
-        </div>
-        <div class="col s12">
-          <div ref="price_product">
-            R$ 0,00
+      <div id="product-images-thumbnail" thumbsSlider="" class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <div 
+            class="swiper-slide"
+            v-for="(media, index) in getProductMedia"
+          >
+            <img 
+              :src="media.src" 
+              :alt="media.alt"
+            />
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="col s12 l6 right-container">
+    <div class="container-product">
+      <div class="row">
+        <div class="col s12">
+          <h1 class="title">
+            {{ product.title }}
+          </h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div>
+            Estrelas das avaliações....
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="container-product-price">
+            <div class="container-compare-price">
+              <div class="old-price">
+                <span class="from-price">De </span>
+                <span class="old-price-value" ref="old_price">
+                  R$ 5.000,00
+                </span>
+              </div>
+            </div>
+            <div class="container-price">
+              <span class="to-price">
+                Por
+              </span>
+              <span class="new-price-value" ref="product_price">
+                R$ 0,00
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row"><div class="line"></div></div>
+      <div class="row">
+        <div class="col s12">
+          <div class="container-title-options">
+            <h3>
+              Opções
+            </h3>
+          </div>
+        </div>
+        <div class="col s12">
+          <div 
+            v-for="(option, indexOption) in getProductOptions"
+            :key="indexOption" 
+            class="container-body-options"
+          >
+            <div class="options-name">
+              ${option.name}
+            </div>
+            <div class="option-values">
+              <select
+                :data-option-name="option.name"  
+              >
+                <option
+                  v-for="(value, indexValue) in option.values"
+                  :key="indexValue"
+                  :value="value"
+                  :selected="indexValue == 0"
+                >${value}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row"><div class="line"></div></div>
+      <div class="row">
+        <div class="col s12">
+          <div class="container-select-quantity">
+            <div class="box-quantity">
+              <label>Escolha a Quantidade</label>
+              <select id="quantity-select" class="browser-default">
+                <option value="1" selected>1 Item</option>
+                <option value="2">2 Itens</option>
+                <option value="3">3 Itens</option>
+                <option value="4">4 Itens</option>
+                <option value="5">5 Itens</option>
+                <option value="6">6 Itens</option>
+                <option value="7">7 Itens</option>
+                <option value="8">8 Itens</option>
+                <option value="9">9 Itens</option>
+                <option value="10">10 Itens</option>
+              </select>
+            </div>
+            <div class="box-add-to-cart">
+              <a class="waves-effect waves-light btn-small">Adicionar ao carrinho</a>
+            </div>
+          </div>
+        </div>
+        <div class="col s12">
+          <div class="container-buy-button">
+            <a class="waves-effect waves-light btn-large">Comprar agora</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <ul class="collapsible popout">
+            <li>
+              <div 
+                class="collapsible-header"
+                >
+                  <i class="material-icons">info</i>
+                  Descrição
+                </div>
+                <div ref="product_description" class="collapsible-body">
+
+                </div>
+            </li>
+            <li>
+              <div class="collapsible-header"><i class="material-icons">rate_review</i>Avaliações</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- <div class="product-template container">
 
@@ -165,19 +246,30 @@
     //   })
     // };
 
+    // console.log("componentButtonCart", componentButtonCart)
+    // console.log("awdadwdauwdhawiudhiuwahduiui")
+
     createApp({
       // components: {
-      //   "teste": testeComponent,
+      //   "componentButtonCart": componentButtonCart,
       // },
       delimiters: ['${', '}'],
       data: () => ({
         header: "Cabeçalho",
         productImageInstance: null,
         productThumbnailImageInstance: null,
-        eventLoop: null,
-        eventTime: 5000,
-        hibernateEventMain: null,
-        hibernateEventThumbnail: null,
+        eventShakeBuyButton: null,
+
+        // eventLoop: null,
+        // eventTime: 5000,
+        // hibernateEventMain: null,
+        // hibernateEventThumbnail: null,
+        collapsibleEl: null,
+        selected: {
+          variantID: null,
+          options: {},
+          quantity: 1,
+        },
       }),
       computed: {
         ...mapGetters([
@@ -185,11 +277,16 @@
           // "getProduct",
           "getProductPrice",
           "getProductMedia",
+          "getProductOptions",
+          "getProductDescription",
+          "getProductVariants",
         ])
       },
       methods: {
         ...mapActions([
           "setProduct",
+          "addProductToCart",
+          "setCartProducts",
         ]),
         async onAddToCart(event) {
           event.preventDefault();
@@ -200,120 +297,170 @@
           // })
           // await this.setCartProducts()
         },
-        setEventLoop() {
-          this.stopEventLoop()
-          this.eventLoop = setInterval(
+        setEventShakeBuyButton() {
+          clearInterval(this.eventShakeBuyButton)
+          let button = $(".container-buy-button a");
+          button.removeClass("shakeX");
+          setTimeout(
             () => {
-              let nextEl = $("#product_images_thumbnail .splide__slide.is-active").next();
-              if (nextEl.is('.is-next')) {
-                // nextEl.click();
-                this.productThumbnailImageInstance.go('>')
-              } else {
-                this.productThumbnailImageInstance.go(0)
-              }
+              button.addClass("shakeX");
             },
-            this.eventTime
+            50
           )
-        },
-        stopEventLoop() {
-          clearInterval(this.eventLoop)
-        },
-        setHibernateEventMain() {
-          this.stopEventLoop();
-          this.stopHibernateEventMain();
-          this.hibernateEventMain = setTimeout(
+          this.eventShakeBuyButton = setInterval(
             () => {
-              this.setEventLoop();
+              button.removeClass("shakeX");
+              setTimeout(
+                () => {
+                  button.addClass("shakeX");
+                },
+                50
+              )
             },
-            this.eventTime
+            3000
           );
         },
-        stopHibernateEventMain() {
-          clearTimeout(this.hibernateEventMain)
-        },
-        setHibernateEventThumbnail() {
-          this.stopEventLoop();
-          this.stopHibernateEventThumbnail();
-          this.hibernateEventThumbnail = setTimeout(
-            () => {
-              this.setEventLoop();
-            },
-            this.eventTime
+        setVariantID() {
+          // console.log("this.getProductVariants", this.getProductVariants)
+          this.selected.variantID = null;
+          let optionsValues = Object.values(this.selected.options);
+          let variantTarget = this.getProductVariants.find(
+            (variant) => {
+              let isDiff = variant.options.some(
+                (option) => {
+                  return !optionsValues.includes(option);  
+                }
+              )
+              return !isDiff;
+            }
           );
-        },
-        stopHibernateEventThumbnail() {
-          clearTimeout(this.hibernateEventThumbnail)
-        },
-        setHibernateEventAll() {
-          this.setHibernateEventMain();
-          this.setHibernateEventThumbnail();
+          // console.log("variantTarget", variantTarget)
+          this.selected.variantID = variantTarget.id;
         },
       },
       async created() {
         await this.setProduct("{{ product.handle }}")
       },
+      mounted() {
+        this.setEventShakeBuyButton()
+        this.collapsibleEl = $(".collapsible")
+        this.collapsibleEl.collapsible();
+
+        $(".collapsible li").click(
+          function (e) {
+            let target = $(this)[0];
+            if (target.classList.contains('active')) return;
+            let body = target.querySelector(".collapsible-body");
+            let fn = setInterval(
+              () => {
+                if (body.style.display !== 'block') return;
+                clearInterval(fn)
+                scrollTo(
+                  target.offsetTop - navBarHeight,
+                  0,
+                  150
+                )
+              }, 100
+            );
+          }
+        )
+
+        // Adicionando o evento no select de quantidade
+        let $select = $("#quantity-select");
+        this.selected.quantity = parseInt($select.val());
+        $select.off('change')
+        $select.change(
+          (e) => {
+            // console.log(e)
+            let selectEl = e.target;
+            this.selected.quantity = parseInt(selectEl.value);
+          }
+        )
+
+        // Evento de adicionar no carrinho
+        let $button = $('.box-add-to-cart')
+        $button.off('click')
+        $button.click(
+          async (e) => {
+            console.log(e)
+            await this.addProductToCart({
+              variantID:  this.selected.variantID,
+              quantity:   this.selected.quantity,
+            })
+
+            await this.setCartProducts();
+            // let selectEl = e.target;
+            // this.selected.quantity = parseInt(selectEl.value);
+          }
+        )
+      },
       watch: {
         getProductPrice(newValue) {
-          this.$refs.price_product.innerHTML = formatCurrency(newValue);
+          this.$refs.product_price.innerHTML = formatCurrency(newValue);
+        },
+        getProductDescription(newValue) {
+          this.$refs.product_description.innerHTML = newValue;
+          this.$nextTick(
+            () => {
+              this.collapsibleEl.collapsible('open', 0)
+            }
+          )
         },
         getProductMedia(newValue) {
           this.$nextTick(
             () => {
-              if (this.productImageInstance) {
-                this.productImageInstance.destroy();
-              }
-              if (this.productThumbnailImageInstance) {
-                this.productThumbnailImageInstance.destroy();
-              }
-              this.productImageInstance = new Splide('#product_images', {
-                type      : 'fade',
-                rewind    : true,
-                pagination: false,
-                arrows    : false,
-                heightRatio: 1,
-                // autoplay: true,
-                
-              });
-              this.productThumbnailImageInstance = new Splide('#product_images_thumbnail', {
-                fixedWidth  : 100,
-                fixedHeight : 60,
-                gap         : 10,
-                rewind      : true,
-                pagination  : false,
-                isNavigation: true,
-                // autoplay: true,
-                focus      : 'center',
-                breakpoints: {
-                  600: {
-                    fixedWidth : 60,
-                    fixedHeight: 44,
+              this.productThumbnailImageInstance = new Swiper(
+                "#product-images-thumbnail", {
+                  spaceBetween: 10,
+                  slidesPerView: 4,
+                  freeMode: true,
+                  watchSlidesProgress: true,
+                }
+              );
+              this.productImageInstance = new Swiper(
+                "#product-images", {
+                  spaceBetween: 30,
+                  centeredSlides: true,
+                  autoplay: {
+                    delay: 3500,
+                    disableOnInteraction: false,
+                  },
+                  pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                  },
+                  navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  },
+                  thumbs: {
+                    swiper: this.productThumbnailImageInstance,
                   },
                 },
-              })
-              this.productImageInstance.sync(this.productThumbnailImageInstance);
-              this.productImageInstance.mount();
-              this.productThumbnailImageInstance.mount();
-              this.productImageInstance.on('drag', () => {
-                this.setHibernateEventAll()
-              })
-              this.productImageInstance.on('click', () => {
-                this.setHibernateEventAll()
-              })
-              // // -------------------------------------------
-              this.productThumbnailImageInstance.on('drag', () => {
-                this.setHibernateEventAll();
-              })
-              this.productThumbnailImageInstance.on('click', () => {
-                this.setHibernateEventAll();
-              })
-              $("#product_images_thumbnail button").on(
-                "click", 
-                () => {
-                  this.setHibernateEventAll();
+              );
+            }
+          )
+        },
+        getProductOptions(newValue) {
+          // Adicionar o evento de mudança de select
+          this.$nextTick(
+            function () {
+              newValue.forEach(
+                (option) => {
+                  let $select = $(`[data-option-name='${option.name}']`);
+                  this.selected.options[option.name] = $select.val();
+                  $select.off('change')
+                  $select.change(
+                    (e) => {
+                      // console.log(e)
+                      let selectEl = e.target;
+                      this.selected.options[selectEl.dataset['optionName']] = selectEl.value;
+                      this.setVariantID();
+                    }
+                  )
                 }
               )
-              // Ativar evento para passar o slide
-              this.setEventLoop();
+              this.setVariantID();
             }
           )
         },
@@ -321,6 +468,14 @@
     })
     .use(store)
     .mount("#product")
+
+    // $button.removeClass("animated shake");
+    // setTimeout(
+    //   function() {
+    //     $button.addClass("animated shake");
+    //   },
+    //   25
+    // );
 
   });
 </script>

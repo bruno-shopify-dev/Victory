@@ -7,246 +7,134 @@
   <meta name="description" content="{{ page_description | escape }}">
   <link rel="canonical" href="{{ canonical_url }}">
 
-  <!-- Scripts -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- AxiosJS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <!-- AxiosJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- ./AxiosJS -->
-    <!-- JQuery -->
-    <script
-      src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-      crossorigin="anonymous"
-      ></script>
-    <!-- ./JQuery -->
-    <!-- VueJS -->
+  <!-- ./AxiosJS -->
+
+  <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
+  <!-- ./JQuery -->
+
+  <!-- VueJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.33/vue.global.min.js" integrity="sha512-nswZG83l1MggaGEAe/zLIbsVpZJUyqv+yg40f2CNp9QH5AOtOsjS4PSdWRDEr/v+R6YPhNJ1gvhDEJDOqh5qxQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- ./VueJS -->
-    <!-- Vuex -->
+  <!-- ./VueJS -->
+
+  <!-- Vuex -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/4.0.2/vuex.global.min.js" integrity="sha512-GKLeb1CRVJqg4JTEdoUOdWXPHV/7+Uk24/f7Su++SRyrXvz9/FVt178ZpHa6qWL67HPIjEXNjdsj3+vZSPpdFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- ./Vuex -->
-    <!-- Materialize -->
+  <!-- ./Vuex -->
+  
+  <!-- Materialize -->
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- ./Materialize -->
-    {{ 'splide-core.min.css' | asset_url | stylesheet_tag }}
-    {{ 'splide.min.css' | asset_url | stylesheet_tag }}
-    {{ 'splide.min.js' | asset_url | script_tag }}
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/css/splide.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/js/splide.min.js"></script> -->
-    <script type='text/javascript'>
-      function formatCurrency(value, fractionDigits = 2) {
-          return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: fractionDigits }).format(value);
-      }
-    </script>
-    <script type='text/javascript'>
-      // console.log("Vue", Vue)
-      // console.log("Vuex", Vuex)
-      var store = Vuex.createStore({
-        state () {
-          return {
-            header: "Vuex",
-            product: {
-              open: false,
-              variants: [],
-              options: [],
-              media: [],
-              media_ids: [],
-              title: '',
-              price: 0,
-              price_compare: 0,
-            },
-            form: {
-              selections: [],
-              options: [],
-            },
-            cart: {
-              products: [],
-              // freight:    0,
-              item_count: 0,
-              // discount:   0,
-              total_price:   0,
-            },
-          }
-        },
-        mutations: {
-          SET_STATE(state, payload) {
-            Object.keys(payload).forEach(
-              (keysString) => {
-                let keys = keysString.split('.')
-                let lastKey = keys.pop();
-                let ref = state;
-                keys.forEach(
-                  (key) => {
-                    ref = ref[key];
-                  }
-                )
-                ref[lastKey] = payload[keysString]
-              }
-            )
-          },
-        },
-        actions: {
-          setHeader({commit}, payload) {
-            commit('SET_STATE', {
-              header: payload,
-            })
-          },
-          setProduct({commit}, product_handle) {
-            return new Promise(
-              async (resolve, reject) => {
-                try {
-                  let response = await axios.get(`/products/${product_handle}.js`)
-                  let product = response.data;
-                  let media = [];
-                  let media_ids = [];
-                  product.media.forEach(
-                    (m) => {
-                      if (media_ids.includes(m.id)) return;
-                      media.push(m);
-                      media_ids.push(m.id);
-                    }
-                  );
-                  if (product.hasOwnProperty('variants')) {
-                    product.variants.forEach(
-                      (v) => {
-                        let m = v.featured_media;
-                        if (media_ids.includes(m.id)) return;
-                        media.push(m);
-                        media_ids.push(m.id);
-                      }
-                    );
-                  }
-                  console.log("setProduct - response", product)
-                  commit('SET_STATE', {
-                    "product.media": media,
-                    "product.media_ids": media_ids,
-                    "product.options": product.options,
-                    "product.title": product.title,
-                    "product.price": product.price,
-                    "product.price_compare": product.compare_at_price,
-                  })
-                  resolve(true)
-                } catch (error) {
-                  reject(error)
-                }
-              }
-            )
-          },
-          setCartProducts({commit}) {
-            axios.get(
-              `/cart.js`
-            )
-            .then((response) => {
-              console.log("setCartProducts - response", response.data)
-              // this.productData = response.data;
-              commit('SET_STATE', {
-                "cart.products": response.data.items,
-                "cart.item_count": response.data.item_count,
-                "cart.total_price": response.data.total_price,
-              })
-            })
-            .catch((error) => {
-              console.error(error)
-            })
-          },
-          addProductToCart({state, commit}, payload) {
-            let { variant_id, quantity } = payload;
-            let data = {
-              id: variant_id,
-              quantity: quantity,
-            }
-            axios.post(
-              '/cart/add.js',
-              data
-            )
-            .then((response) => {
-              console.log("addProductToCart - response", response)
-            })
-            .catch((error) => {
-              console.error(error)
-            })
-          },
-        },
-        getters: {
-          getHeader: state => state.header,
-          // getProduct: state => state.product,
-          // -----------------------------------------------------
-          // Cart
-          getItemCountCart: state => state.cart.item_count,
-          getItemCountCart: state => state.cart.item_count,
-          getTotalPriceCart: state => state.cart.total_price,
-          // -----------------------------------------------------
-          // Product
-          getProductPrice: state => state.product.price,
-          getProductMedia: state => state.product.media,
-        }
-      })
-      // console.log("store", store)
-    </script>
-  <!-- ./Scripts -->
+  <!-- ./Materialize -->
+  
+  <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+  <!-- ./Swiper -->
+
+  {{ 'utils.js' | asset_url | script_tag }}
+  {{ 'vuex-store.js' | asset_url | script_tag }}
+
+  <!-- Components -->
+  <!-- {{ 'components.js' | asset_url | script_tag }} -->
+
+  <!-- Components Pieces -->
+  {{ 'component-button-cart.js' | asset_url | script_tag }}
 
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
   {{ 'application.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }} <!-- Header hook for plugins -->
   <!-- {{ 'application.css' | asset_url | stylesheet_tag }} -->
+
+  <style>
+    .flex {
+      display: flex;
+    }
+    .f-column {
+      flex-direction: column;
+    }
+    .f-row {
+      flex-direction: row;
+    }
+    .f-justify-center {
+      justify-content: center;
+    }
+    .f-align-center {
+      align-content: center;
+    }
+
+    .red { background-color: red; }
+    .green { background-color: green; }
+    .white { background-color: white; }
+    .blue { background-color: blue; }
+    .purple { background-color: purple; }
+    .brown { background-color: brown; }
+    .yellow { background-color: yellow; }
+    .black { background-color: black; }
+    .h-200 { height: 200px; }
+    .h-400 { height: 400px; }
+    .h-600 { height: 600px; }
+    .h-800 { height: 800px; }
+    .h-1000 { height: 1000px; }
+    .h-1500 { height: 1500px; }
+    .h-2000 { height: 2000px; }
+    .w-100 { width: 100px; }
+    .w-200 { width: 200px; }
+    .w-400 { width: 400px; }
+    .w-600 { width: 600px; }
+    .w-800 { width: 800px; }
+    .w-1000 { width: 1000px; }
+    .w-1500 { width: 1500px; }
+    .w-2000 { width: 2000px; }
+  </style>
+  <style>
+    
+  </style>
 </head>
 <body>
-  <div id="app" style="position:relative;">
+  <div id="app">
     
     <div class="navbar-fixed">
       <nav>
         <div class="nav-wrapper">
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <div class="brand-logo">
             <a href="#!" style="width:100%;height:100%;">Logo</a>
           </div>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <!-- <div style="float: right;width: 50px;display: block;"> -->
           <!-- <a href="#" data-target="menu-right" style="float: right;width: 50px;display: block;height: 100%;display: flex;justify-content: center;align-items: center;margin: 0 !important;">
             <i class="material-icons">shopping_cart</i>
           </a> -->
-          <div class="container-cart-button">
-            <!-- <span style="position: absolute;z-index: 2;display: flex;background-color: red;width: 25px;height: 25px;justify-content: center;align-items: center;border-radius: 15px;font-weight: bold;top: 0;right: 0;color: black;">${getItemCountCart}</span> -->
-            
-            <div>
-              <a href="/cart" class="btn-floating btn-large container-cart-link z-depth-1">
-                <div class="container-cart-info">
-                  <span ref="item_count" style="font-weight: bold;">0 Item</span>
-                  <span ref="total_price" style="font-weight: bold;">R$ 0,00</span>
-                </div>
-                <div class="container-cart-icon">
-                  <i class="material-icons">shopping_cart</i>
-                </div>
-              </a>
-            </div>
-            <!-- <a v-else href="#" class="btn-floating btn-large pulse" style="margin: 0 !important;background-color: green;">
-              <i class="material-icons" style="color: white;">shopping_cart</i>
-            </a> -->
-          </div>
           <!-- </div> -->
-          <ul class="right hide-on-med-and-down">
-            <!-- <li><a href="sass.html">Sass</a></li>
-            <li><a href="badges.html">Components</a></li>
-            <li><a href="collapsible.html">Javascript</a></li>
-            <li><a href="mobile.html">Mobile</a></li> -->
-            {% for link in linklists.main-menu.links %}
-              {% assign child_list_handle = link.title | handleize %}
-              {% if linklists[child_list_handle].links != blank %}
-                <li>  
-                  <a href="{{ link.url }}">{{ link.title }}</a>
-                </li>
-                [{% for childlink in linklists[child_list_handle].links %}
-                  <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
-                {% endfor %}]
-              {% else %}
-                <li>
-                  <a href="{{ link.url }}">{{ link.title }}</a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
+          <div class="flex f-row f-justify-center f-align-center">
+            <ul class="right hide-on-med-and-down">
+              <!-- <li><a href="sass.html">Sass</a></li>
+              <li><a href="badges.html">Components</a></li>
+              <li><a href="collapsible.html">Javascript</a></li>
+              <li><a href="mobile.html">Mobile</a></li> -->
+              {% for link in linklists.main-menu.links %}
+                {% assign child_list_handle = link.title | handleize %}
+                {% if linklists[child_list_handle].links != blank %}
+                  <li>  
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  </li>
+                  [{% for childlink in linklists[child_list_handle].links %}
+                    <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
+                  {% endfor %}]
+                {% else %}
+                  <li>
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <component-button-cart />
+          </div>
         </div>
       </nav>
     </div>
@@ -313,6 +201,10 @@
     {{ content_for_layout }}
   </main>
 
+  <div class="container-scroll-to-top">
+    <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">arrow_upward</i></a>
+  </div>
+
   <script type='text/javascript'>
     $(document).ready(function() {
 
@@ -323,6 +215,9 @@
       } = Vuex;
 
       createApp({
+        components: {
+          "componentButtonCart": componentButtonCart,
+        },
         delimiters: ['${', '}'],
         data: () => ({
           header: "Cabeçalho",
@@ -336,24 +231,24 @@
         computed: {
           ...mapGetters([
             "getHeader",
-            "getItemCountCart",
-            "getTotalPriceCart",
+            // "getItemCountCart",
+            // "getTotalPriceCart",
           ])
         },
-        watch: {
-          getItemCountCart(newValue) {
-            if (newValue == 1) {
-              this.$refs.item_count.innerHTML = "1 Item"
-            } else if (newValue > 1) {
-              this.$refs.item_count.innerHTML = `${newValue} Itens`
-            } else {
-              this.$refs.item_count.innerHTML = '0 Item'
-            }
-          },
-          getTotalPriceCart(newValue) {
-            this.$refs.total_price.innerHTML = formatCurrency(newValue);
-          },
-        },
+        // watch: {
+        //   getItemCountCart(newValue) {
+        //     if (newValue == 1) {
+        //       this.$refs.item_count.innerHTML = "1 Item"
+        //     } else if (newValue > 1) {
+        //       this.$refs.item_count.innerHTML = `${newValue} Itens`
+        //     } else {
+        //       this.$refs.item_count.innerHTML = '0 Item'
+        //     }
+        //   },
+        //   getTotalPriceCart(newValue) {
+        //     this.$refs.total_price.innerHTML = formatCurrency(newValue);
+        //   },
+        // },
         async created() {
           await this.setCartProducts()
         },
@@ -362,6 +257,39 @@
       .mount("#app")
 
       $('.sidenav').sidenav();
+
+      let mainEl = document.querySelector('main');
+      $('.container-scroll-to-top a').click(
+        function (e) {
+          $('main').off('scroll')
+          scrollTo(0)
+          $('main').scroll(
+            function (e) {
+              if (mainEl.scrollTop < 300) {
+                $scrollToTopButton.css("display", 'none')
+              } else {
+                $scrollToTopButton.css("display", 'flex')
+              }
+            }
+          )
+        }
+      )
+
+      let $scrollToTopButton = $('.container-scroll-to-top')
+      if (mainEl.scrollTop < 300) {
+        $scrollToTopButton.css("display", 'none')
+      } else {
+        $scrollToTopButton.css("display", 'flex')
+      }
+      $('main').scroll(
+        function (e) {
+          if (mainEl.scrollTop < 300) {
+            $scrollToTopButton.css("display", 'none')
+          } else {
+            $scrollToTopButton.css("display", 'flex')
+          }
+         }
+      )
 
     });
   </script>
