@@ -37,10 +37,11 @@
     //   delay: 5000,
     //   disableOnInteraction: false,
     // },
+    
     effect: "coverflow",
     grabCursor: true,
     centeredSlides: true,
-    slidesPerView: "auto",
+    slidesPerView: 1,
     coverflowEffect: {
       rotate: 50,
       stretch: 0,
@@ -52,5 +53,11 @@
       nextEl: ".collection .swiper .swiper-button-next",
       prevEl: ".collection .swiper .swiper-button-prev",
     },
+    breakpoints: {
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+        }
   });
 </script>
