@@ -1,12 +1,41 @@
-<!-- {% for product in collection.products %} -->
-<div>
-    <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
-    {{ product.price | money }}
-    {% unless product.available %}<br><strong>sold out</strong>{% endunless %}
-    <a href="{{ product.url | within: collection }}">
-        <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
-    </a>
+<div class="swiper-slide">
+  <div id="product-{{ product.id }}" class="container-product-card">
+    <div class="card">
+      <div class="card-header">
+        <span>Em até 12x sem juros</span>
+      </div>
+      <div class="card-image">
+        <img src="{{ product.featured_image | img_url: 'master' }}">
+      </div>
+      <div class="card-content">
+        <div class="card-name">
+          <a href="{{ product.url | within: collection }}">
+            <h2>
+              <span>
+                {{ product.title | upcase }}
+              </span>
+            </h2>
+          </a>
+        </div>
+        <div class="available-price-card">
+          <span class="old-price">R$ 5.000,00</span>
+          <span class="new-price">R$ 3.500,00</span>
+          <span class="price-text">5% desconto no PIX</span>
+        </div>
+      </div>
+      <div class="card-action">
+        <div class="available-footer-card">
+          <a href="#">
+            <i class="small material-icons">shopping_cart</i>
+            <span>Comprar</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- {% else %}
-  <p>no matches</p>
-{% endfor %} -->
+
+<script>
+  var product = {{ product | json }}
+  console.log("product", product)
+</script>

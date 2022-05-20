@@ -1,10 +1,56 @@
+{% for product_type in collection.all_types %}
+  {{ product_type | link_to_type }}
+{% endfor %}
+
 
 <div class="container">
   <div class="collection">
-    <h1 class="collection-title">{{ collection.title }}</h1>
+    <div class="collection-title">
+      <div style="flex: 10;">
+        <h1>{{ collection.title }}</h1>
+      </div>
+      <div style="flex: 4;text-align: end;margin-right: 0.5rem;">
+        <a href="#">
+          Ver todos
+        </a>
+      </div>
+    </div>
     <div class="collection-list">
       <!-- insert snippet -->
-      {% render 'product-card' for collection.products as product %}
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {% render 'product-card' for collection.products as product %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+
     </div>
   </div>
 </div>
+
+<script>
+  var swiper = new Swiper(".collection .swiper", {
+    // spaceBetween: 30,
+    // centeredSlides: true,
+    // autoplay: {
+    //   delay: 5000,
+    //   disableOnInteraction: false,
+    // },
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    },
+    navigation: {
+      nextEl: ".collection .swiper .swiper-button-next",
+      prevEl: ".collection .swiper .swiper-button-prev",
+    },
+  });
+</script>

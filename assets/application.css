@@ -64,6 +64,158 @@ body {
 }
 
 /****************************************************** 
+    Product Card 
+*/
+
+.container-product-card {
+    width: 230px;
+    z-index: 1;
+}
+    .container-product-card .card-content {
+        padding: 0 1rem;
+    }
+
+        .container-product-card .card-content .card-name {
+            width: 100%;
+        }
+
+            .container-product-card .card-name h2 {
+                margin: 0;
+            }
+
+                .container-product-card .card-name h2 span {
+                    height: 30px;
+                    font-size: 0.875rem;
+                    line-height: 1.125rem;
+                    font-weight: 600;
+                    margin-top: 0.5rem;
+                    color: rgb(66, 70, 77);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    text-align: left;
+                }
+
+    .container-product-card .available-price-card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 0.5rem 0px;
+        align-items: baseline;
+    }
+
+        .container-product-card .available-price-card .old-price {
+            font-size: 0.75rem;
+            line-height: 1rem;
+            font-weight: 400;
+            height: 1rem;
+            color: rgb(127, 133, 141);
+            text-decoration: line-through;
+        }
+
+        .container-product-card .available-price-card .new-price {
+            font-size: 1.5rem;
+            line-height: 2.125rem;
+            font-weight: 700;
+            color: rgb(255, 101, 0);
+        }
+
+        .container-product-card .available-price-card .price-text {
+            font-size: 0.75rem;
+            line-height: 1.125rem;
+            font-weight: 400;
+            height: 1.125rem;
+            color: rgb(127, 133, 141);
+        }
+
+    .container-product-card .card-action {
+        padding: 0;
+    }
+
+        .container-product-card .card-action .available-footer-card {
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            height: 2.25rem;
+            width: 100%
+        }
+
+            .container-product-card .card-action .available-footer-card a {
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                background-color: rgb(255, 101, 0);
+                width: 100%;
+            }
+
+                .container-product-card .card-action .available-footer-card a i {
+                    font-size: 1.5rem;
+                }
+
+                .container-product-card .card-action .available-footer-card a span {
+                    font-size: 0.875rem;
+                }
+
+                .container-product-card .card-action .available-footer-card a i,
+                .container-product-card .card-action .available-footer-card a span {
+                    color: white;
+                }
+
+    .container-product-card .card-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0.5rem;
+    }
+
+        .container-product-card .card-image img {
+            height: 8.25rem;
+            width: auto;
+            object-fit: contain;
+        }
+
+    .container-product-card .card-header {
+        height: 3rem;
+        background-color: rgba(0,0,0,.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .container-product-card .card-header span {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+/****************************************************** 
+    Collection 
+*/
+.collection-title {
+    margin: 0.5rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    min-height: 3rem;
+}
+    .collection-title h1 {
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .collection-title a {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+    }
+
+/****************************************************** 
     Swiper Slide 
 */
 .swiper {
@@ -450,7 +602,9 @@ body {
 
 /* Tablet Devices */
 @media (min-width:600px) { 
-    
+    .container-product-card .card-title {
+
+    }
 }
 
 /* Desktop Devices */
