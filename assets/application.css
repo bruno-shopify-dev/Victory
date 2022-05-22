@@ -25,6 +25,12 @@ nav {
 }
 
 main {
+    /* height: calc(100vh - 64px); */
+    /* overflow: scroll; */
+    /* height: 100%; */
+}
+
+#scroll-content {
     height: calc(100vh - 64px);
     overflow: scroll;
 }
@@ -62,6 +68,199 @@ body {
     right: 0;
     z-index: 1;
 }
+
+.container-btn {
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+    .box-btn {
+        margin: 0;
+        padding: 5px;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+/****************************************************** 
+    Header
+*/
+.container-header {
+    height: 64px;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    background-color: #0d47a1;
+}
+
+    .header-btn {
+        background-color: #1e88e5;
+    }
+
+    .container-header .container-left-header {
+        position: absolute;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px !important;
+    }
+
+        .box-left-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+
+            .box-left-header i {
+                color: white;
+                font-size: 30px;
+            }
+
+    .container-header .container-right-header {
+        position: absolute;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 65px !important;
+    }
+        .container-header .container-right-header .container-btn {
+            overflow: inherit;
+            position: relative;
+        }
+
+            .box-right-header i {
+                color: white;
+                font-size: 30px;
+            }
+
+            .box-right-header .items-number {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                display: flex;
+                width: 20px;
+                height: 20px;
+                justify-content: center;
+                align-items: center;
+                border-radius: 10px;
+                background-color: red;
+                font-size: 0.875rem;
+                color: white;
+                font-weight: 500;
+            }
+
+    .container-logo-header {
+        max-width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container-minicart {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        height: 100vh;
+        width: 100%;
+        background-color: rgba(0,0,0,.5);
+    }
+        .container-minicart {
+            transform: translateX(100%);
+            display: none;
+            overflow-y: scroll;
+            flex-direction: column;
+            align-items: end;
+        }
+
+        .container-minicart.close {
+            animation: animation-minicart-close ease-out .3s;
+            transform: translateX(100%);
+        }
+        
+        @keyframes animation-minicart-close {
+            0% {
+                transform: translateX(0%);
+                display: flex;
+            }
+        
+            100% {
+                transform: translateX(100%);
+                display: none;
+            }
+        }
+
+        .container-minicart.open {
+            animation: animation-minicart-open ease-out .3s;
+            transform: translateX(0%);
+            display: flex;
+        }
+        
+        @keyframes animation-minicart-open {
+            0% {
+                transform: translateX(100%);
+            }
+        
+            100% {
+                transform: translateX(0%);
+            }
+        }
+
+        .container-content-minicart {
+            background-color: white;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .close-minicart {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+        }
+
+/* Breakpoints browser */
+@media (min-width:375px) {
+    .container-logo-header {
+        max-width: 130px;
+    }
+}
+
+@media (min-width:425px) {
+    .container-logo-header {
+        max-width: 150px;
+    }
+}
+
+@media (min-width:768px) {
+    .container-logo-header {
+        max-width: 250px;
+    }
+}
+
+/* Breakpoints of content */
+@media (min-width:600px) { 
+    .container-header {
+        height: 100px;
+    }
+}
+
+@media (min-width:992px) {
+    .container-header {
+        justify-content: left;
+    }
+
+    .container-header .container-left-header {
+        display: none;
+    }
+}
+
 
 /****************************************************** 
     Collection 
