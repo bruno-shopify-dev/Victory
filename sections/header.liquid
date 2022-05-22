@@ -1,5 +1,35 @@
-<div id="app">
+<header id="header" class="container-header">
     
+    <div class="container-left-header h-100perc">
+        <div class="box-left-header">
+            <div class="container-btn header-btn">
+                <a class="box-btn" href="#"><i class="material-icons">menu</i></a>
+            </div>
+            <div class="container-btn header-btn">
+                <a class="box-btn" href="#"><i class="material-icons">search</i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-right-header h-100perc">
+        <div class="box-right-header">
+            <div class="container-btn header-btn">
+                <a class="box-btn" href="#">
+                    <i class="material-icons">shopping_cart</i>
+                    <span class="items-number">4</span>
+                </a>
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="container-logo-header h-100perc blue" style="width: 100%;">
+        <div class="box-logo">
+            <span style="font-size: 1.5rem;text-transform: uppercase;">Logo</span>
+        </div>
+    </div>
+
+    {%- comment -%}
     <div class="navbar-fixed">
       <nav>
         <div class="nav-wrapper">
@@ -39,7 +69,9 @@
         </div>
       </nav>
     </div>
+    {%- endcomment -%}
 
+    {%- comment -%}
     <ul class="sidenav" id="mobile-demo">
       <!-- <li><a href="sass.html">Sass</a></li>
       <li><a href="badges.html">Components</a></li>
@@ -61,6 +93,7 @@
         {% endif %}
       {% endfor %}
     </ul>
+    {%- endcomment -%}
 
     <!-- <ul class="sidenav" id="menu-right">
       <li><a href="sass.html">Sass</a></li>
@@ -86,7 +119,8 @@
     {% endfor %} -->
   
     <!-- <a href="/cart">cart</a> -->
-  
+    
+    {%- comment -%}
     {% if shop.customer_accounts_enabled %}
       {% if customer %}
         <a href="/account">account</a>
@@ -96,7 +130,8 @@
         {{ 'register' | customer_register_link }}
       {% endif %}
     {% endif %}
-</div>
+    {%- endcomment -%}
+</header>
 
 <script>
     $(document).ready(function () {
@@ -108,24 +143,24 @@
 
         createApp({
             components: {
-            "componentButtonCart": componentButtonCart,
+                "componentButtonCart": componentButtonCart,
             },
             delimiters: ['${', '}'],
             data: () => ({
-            header: "Cabeçalho",
+                header: "Cabeçalho",
             }),
             methods: {
-            ...mapActions([
-                "setHeader",
-                "setCartProducts",
-            ]),
+                ...mapActions([
+                    "setHeader",
+                    "setCartProducts",
+                ]),
             },
             computed: {
-            ...mapGetters([
-                "getHeader",
-                // "getItemCountCart",
-                // "getTotalPriceCart",
-            ])
+                ...mapGetters([
+                    "getHeader",
+                    // "getItemCountCart",
+                    // "getTotalPriceCart",
+                ])
             },
             // watch: {
             //   getItemCountCart(newValue) {
@@ -142,11 +177,11 @@
             //   },
             // },
             async created() {
-            await this.setCartProducts()
+                await this.setCartProducts()
             },
         })
         .use(store)
-        .mount("#app")
+        .mount("#header")
 
         $('.sidenav').sidenav();
     })
