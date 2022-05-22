@@ -6,13 +6,13 @@ function formatCurrency(value, fractionDigits = 2) {
 }
 
 function scrollTo(top, left = 0, time = 50) {
-    setTimeout(
-        () => {
-          document.querySelector('main').scrollTo({
-            top,
-            left,
-            behavior:'smooth'
-          })
-        }, time
-    )
+  setTimeout(
+    () => {
+      document.querySelector('#scroll-content').scrollTo({
+        top,
+        left,
+        behavior:'smooth'
+      })
+    }, time
+  )
 }
