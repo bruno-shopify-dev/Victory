@@ -95,109 +95,16 @@
   </style>
 </head>
 <body>
-  <div id="app">
-    
-    <div class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper">
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <div class="brand-logo">
-            <a href="#!" style="width:100%;height:100%;">Logo</a>
-          </div>
-          <!-- <div style="float: right;width: 50px;display: block;"> -->
-          <!-- <a href="#" data-target="menu-right" style="float: right;width: 50px;display: block;height: 100%;display: flex;justify-content: center;align-items: center;margin: 0 !important;">
-            <i class="material-icons">shopping_cart</i>
-          </a> -->
-          <!-- </div> -->
-          <div class="flex f-row f-justify-center f-align-center">
-            <ul class="right hide-on-med-and-down">
-              <!-- <li><a href="sass.html">Sass</a></li>
-              <li><a href="badges.html">Components</a></li>
-              <li><a href="collapsible.html">Javascript</a></li>
-              <li><a href="mobile.html">Mobile</a></li> -->
-              {% for link in linklists.main-menu.links %}
-                {% assign child_list_handle = link.title | handleize %}
-                {% if linklists[child_list_handle].links != blank %}
-                  <li>  
-                    <a href="{{ link.url }}">{{ link.title }}</a>
-                  </li>
-                  [{% for childlink in linklists[child_list_handle].links %}
-                    <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
-                  {% endfor %}]
-                {% else %}
-                  <li>
-                    <a href="{{ link.url }}">{{ link.title }}</a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-            <component-button-cart />
-          </div>
-        </div>
-      </nav>
-    </div>
-
-    <ul class="sidenav" id="mobile-demo">
-      <!-- <li><a href="sass.html">Sass</a></li>
-      <li><a href="badges.html">Components</a></li>
-      <li><a href="collapsible.html">Javascript</a></li>
-      <li><a href="mobile.html">Mobile</a></li> -->
-      {% for link in linklists.main-menu.links %}
-        {% assign child_list_handle = link.title | handleize %}
-        {% if linklists[child_list_handle].links != blank %}
-          <li>  
-            <a href="{{ link.url }}">{{ link.title }}</a>
-          </li>
-          [{% for childlink in linklists[child_list_handle].links %}
-            <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
-          {% endfor %}]
-        {% else %}
-          <li>
-            <a href="{{ link.url }}">{{ link.title }}</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-
-    <!-- <ul class="sidenav" id="menu-right">
-      <li><a href="sass.html">Sass</a></li>
-      <li><a href="badges.html">Components</a></li>
-      <li><a href="collapsible.html">Javascript</a></li>
-      <li><a href="mobile.html">Mobile</a></li>
-    </ul> -->
-
-    <!-- <a href="/cart">cart</a> -->
-    
-    <!--------------------------------------------------------->
   
-    <!-- {% for link in linklists.main-menu.links %}
-      {% assign child_list_handle = link.title | handleize %}
-      {% if linklists[child_list_handle].links != blank %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
-        [{% for childlink in linklists[child_list_handle].links %}
-          <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
-        {% endfor %}]
-      {% else %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
-      {% endif %}
-    {% endfor %} -->
+  {% section 'header' %}
+
+  <div id="scroll-content">
+    <main role="main">
+      {{ content_for_layout }}
+    </main>
   
-    <!-- <a href="/cart">cart</a> -->
-  
-    {% if shop.customer_accounts_enabled %}
-      {% if customer %}
-        <a href="/account">account</a>
-        {{ 'log out'  | customer_logout_link }}
-      {% else %}
-        {{ 'log in ' | customer_login_link }}
-        {{ 'register' | customer_register_link }}
-      {% endif %}
-    {% endif %}
+    {% section 'footer' %}
   </div>
-
-  <main role="main">
-    {{ content_for_layout }}
-  </main>
 
   <div class="container-scroll-to-top">
     <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">arrow_upward</i></a>
@@ -206,64 +113,18 @@
   <script type='text/javascript'>
     $(document).ready(function() {
 
-      const { createApp } = Vue
-      const { 
-        mapActions, 
-        mapGetters 
-      } = Vuex;
+      let scrollEl = document.querySelector('#scroll-content');
+      let $scrollContent = $('#scroll-content');
+      // console.log("scrollEl", scrollEl)
 
-      createApp({
-        components: {
-          "componentButtonCart": componentButtonCart,
-        },
-        delimiters: ['${', '}'],
-        data: () => ({
-          header: "Cabeçalho",
-        }),
-        methods: {
-          ...mapActions([
-            "setHeader",
-            "setCartProducts",
-          ]),
-        },
-        computed: {
-          ...mapGetters([
-            "getHeader",
-            // "getItemCountCart",
-            // "getTotalPriceCart",
-          ])
-        },
-        // watch: {
-        //   getItemCountCart(newValue) {
-        //     if (newValue == 1) {
-        //       this.$refs.item_count.innerHTML = "1 Item"
-        //     } else if (newValue > 1) {
-        //       this.$refs.item_count.innerHTML = `${newValue} Itens`
-        //     } else {
-        //       this.$refs.item_count.innerHTML = '0 Item'
-        //     }
-        //   },
-        //   getTotalPriceCart(newValue) {
-        //     this.$refs.total_price.innerHTML = formatCurrency(newValue);
-        //   },
-        // },
-        async created() {
-          await this.setCartProducts()
-        },
-      })
-      .use(store)
-      .mount("#app")
-
-      $('.sidenav').sidenav();
-
-      let mainEl = document.querySelector('main');
+      // Adicionando o evento de clique no botão de subir ao topo
       $('.container-scroll-to-top a').click(
         function (e) {
-          $('main').off('scroll')
+          $scrollContent.off('scroll')
           scrollTo(0)
-          $('main').scroll(
+          $scrollContent.scroll(
             function (e) {
-              if (mainEl.scrollTop < 300) {
+              if (scrollEl.scrollTop < 300) {
                 $scrollToTopButton.css("display", 'none')
               } else {
                 $scrollToTopButton.css("display", 'flex')
@@ -273,15 +134,16 @@
         }
       )
 
+      // Adicionando o evento de scroll para aparecer o botão de subir ao topo
       let $scrollToTopButton = $('.container-scroll-to-top')
-      if (mainEl.scrollTop < 300) {
+      if (scrollEl.scrollTop < 300) {
         $scrollToTopButton.css("display", 'none')
       } else {
         $scrollToTopButton.css("display", 'flex')
       }
-      $('main').scroll(
+      $scrollContent.scroll(
         function (e) {
-          if (mainEl.scrollTop < 300) {
+          if (scrollEl.scrollTop < 300) {
             $scrollToTopButton.css("display", 'none')
           } else {
             $scrollToTopButton.css("display", 'flex')
