@@ -163,6 +163,68 @@ body {
         align-items: center;
     }
 
+    .container-minicart {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 10;
+        height: 100vh;
+        width: 100%;
+        background-color: rgba(0,0,0,.5);
+    }
+        .container-minicart {
+            transform: translateX(100%);
+            display: none;
+            overflow-y: scroll;
+            flex-direction: column;
+            align-items: end;
+        }
+
+        .container-minicart.close {
+            animation: animation-minicart-close ease-out .3s;
+            transform: translateX(100%);
+        }
+        
+        @keyframes animation-minicart-close {
+            0% {
+                transform: translateX(0%);
+                display: flex;
+            }
+        
+            100% {
+                transform: translateX(100%);
+                display: none;
+            }
+        }
+
+        .container-minicart.open {
+            animation: animation-minicart-open ease-out .3s;
+            transform: translateX(0%);
+            display: flex;
+        }
+        
+        @keyframes animation-minicart-open {
+            0% {
+                transform: translateX(100%);
+            }
+        
+            100% {
+                transform: translateX(0%);
+            }
+        }
+
+        .container-content-minicart {
+            background-color: white;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .close-minicart {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+        }
+
 /* Breakpoints browser */
 @media (min-width:375px) {
     .container-logo-header {

@@ -14,7 +14,7 @@
     <div class="container-right-header h-100perc">
         <div class="box-right-header">
             <div class="container-btn header-btn">
-                <a class="box-btn" href="#">
+                <a id="minicart-btn" class="box-btn" href="#">
                     <i class="material-icons">shopping_cart</i>
                     <span class="items-number">4</span>
                 </a>
@@ -28,6 +28,10 @@
             <span style="font-size: 1.5rem;text-transform: uppercase;">Logo</span>
         </div>
     </div>
+
+    
+    {% render 'minicart' %}
+    
 
     {%- comment -%}
     <div class="navbar-fixed">
@@ -184,5 +188,31 @@
         .mount("#header")
 
         $('.sidenav').sidenav();
+
+        let $containerMinicartEl = $('.container-minicart')
+        let $scrollContentEl = $("#scroll-content")
+
+        $('#minicart-btn').click(
+            function (e) {
+                if ($containerMinicartEl.hasClass('open')) {
+                    $containerMinicartEl.removeClass('open')
+                    $containerMinicartEl.addClass('close')
+                    $scrollContentEl.css('overflow', 'scroll')
+                } else {
+                    $containerMinicartEl.removeClass('close')
+                    $containerMinicartEl.addClass('open')
+                    $scrollContentEl.css('overflow', 'hidden')
+                }
+            }
+        )
+        $containerMinicartEl.click(
+            function (e) {
+                if (e.target.classList.contains('container-minicart')) {
+                    $containerMinicartEl.removeClass('open')
+                    $containerMinicartEl.addClass('close')
+                    $scrollContentEl.css('overflow', 'scroll')
+                }
+            }
+        );
     })
 </script>
