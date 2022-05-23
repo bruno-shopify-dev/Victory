@@ -14,7 +14,7 @@ const cleanCSS = require('gulp-clean-css');
 
 task('join-scss', series(
     function () {
-        return src('assets/scss/*.scss')
+        return src('_files/scss/*.scss')
             .pipe(sourcemaps.init())
             .pipe(concat('production.scss'))
             .pipe(sass())
@@ -28,7 +28,7 @@ task('watch', series(
     function () {
         watch(
             [
-                'assets/scss/*.scss'
+                '_files/scss/*.scss'
             ],
             parallel('join-scss')
         )
