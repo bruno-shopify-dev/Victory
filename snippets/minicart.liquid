@@ -1,16 +1,116 @@
-<div class="container-minicart">
+
+<div id="minicart" class="container-minicart">
     <div class="container-content-minicart">
+        <div class="box-minicart">
 
-        <div class="h-600 red"></div>
+            <div 
+                class="list-products"
+                v-for="(product, index) in getProductsCart"
+                :key="index"
+            >
+                <div class="header flex">
+                    <div class="title f-2 flex f-align-center">
+                        Meu Carrinho
+                    </div>
+                    <div class="close f-1 flex f-justify-end f-align-center">
+                        <button class="flex f-justify-center f-align-center">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </div>
+                </div>
 
-        <div class="h-1000 green"></div>
+                <div class="product">
+                    <div class="featured-image">
+                        <img 
+                            :src="product.featured_image.url" 
+                            :alt="product.featured_image.alt"
+                        >
+                    </div>
+                    <div class="title">
+                        ${product.title}
+                    </div>
+                    <div class="price flex">
+                        <div class="text flex f-1 f-align-end">
+                            Por item
+                        </div>
+                        <div class="price-per-item f-2">
+                            ${formatCurrency(product.final_price)}
+                        </div>
+                    </div>
+                    <div class="total flex">
+                        <div class="text flex f-1 f-align-end">
+                            Total
+                        </div>
+                        <div class="price-per-item f-2">
+                            ${formatCurrency(product.final_line_price)}
+                        </div>
+                    </div>
+                    <div class="quantity flex">
+                        <div class="text flex f-1 f-align-end">
+                            Quantidade
+                        </div>
+                        <div class="items flex f-2">
+                            <div class="minus flex f-justify-center f-align-center f-1">
+                                <div>
+                                    <button class="flex f-justify-center f-align-center">
+                                        <i class="material-icons">add</i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="input flex f-justify-center f-align-center f-2">
+                                <input type="number">
+                            </div>
+                            <div class="plus flex f-justify-center f-align-center f-1">
+                                <div>
+                                    <button class="flex f-justify-center f-align-center">
+                                        <i class="material-icons">remove</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="remove">
+                        <button class="flex f-justify-center f-align-center">
+                            <i class="material-icons">clear</i>
+                        </button>
+                    </div>
+                </div>
 
-        <!-- <div class="close-minicart">
-            <div class="container-btn">
-                <div class="box-btn">
-                    <i class="material-icons">close</i>
+                <div class="footer">
+                    <div class="title">
+                        Resumo
+                    </div>
+                    <div class="subtotal flex">
+                        <div class="text flex f-1 f-justify-end f-align-end">
+                            Sub Total
+                        </div>
+                        <div class="value f-2">
+                            R$ 15.000,00
+                        </div>
+                    </div>
+                    <div class="frete flex">
+                        <div class="text flex f-1 f-justify-end f-align-end">
+                            Frete
+                        </div>
+                        <div class="value f-2">
+                            Grátis
+                        </div>
+                    </div>
+                    <div class="actions flex">
+                        <div class="checkout f-2">
+                            <button class="flex f-justify-center f-align-center">
+                                Finalizar Compra
+                            </button>
+                        </div>
+                        <div class="close f-1">
+                            <button class="flex f-justify-center f-align-center">
+                                Limpar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div> -->
+
+        </div>
     </div>
 </div>

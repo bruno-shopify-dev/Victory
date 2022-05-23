@@ -30,15 +30,15 @@ var store = Vuex.createStore({
         SET_STATE(state, payload) {
         Object.keys(payload).forEach(
             (keysString) => {
-            let keys = keysString.split('.')
-            let lastKey = keys.pop();
-            let ref = state;
-            keys.forEach(
-                (key) => {
-                ref = ref[key];
-                }
-            )
-            ref[lastKey] = payload[keysString]
+                let keys = keysString.split('.')
+                let lastKey = keys.pop();
+                let ref = state;
+                keys.forEach(
+                    (key) => {
+                        ref = ref[key];
+                    }
+                )
+                ref[lastKey] = payload[keysString]
             }
         )
         },
@@ -139,8 +139,8 @@ var store = Vuex.createStore({
         // -----------------------------------------------------
         // Cart
         getItemCountCart: state => state.cart.item_count,
-        getItemCountCart: state => state.cart.item_count,
         getTotalPriceCart: state => state.cart.total_price,
+        getProductsCart: state => state.cart.products,
         // -----------------------------------------------------
         // Product
         getProductPrice:        state => state.product.price,

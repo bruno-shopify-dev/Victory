@@ -29,7 +29,6 @@
         </div>
     </div>
 
-    
     {% render 'minicart' %}
     
 
@@ -158,12 +157,16 @@
                     "setHeader",
                     "setCartProducts",
                 ]),
+                formatCurrency(value) {
+                  return formatCurrency(value)
+                }
             },
             computed: {
                 ...mapGetters([
                     "getHeader",
-                    // "getItemCountCart",
-                    // "getTotalPriceCart",
+                    "getItemCountCart",
+                    "getTotalPriceCart",
+                    "getProductsCart",
                 ])
             },
             // watch: {
