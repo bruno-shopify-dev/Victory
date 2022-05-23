@@ -1,0 +1,19 @@
+.dev {
+    width: 1000px;
+}
+
+.dev-1 {
+    height: 100px;
+    width: 100px;
+
+    .dev-2 {
+        height: 200px;
+        width: 200px;
+
+        .dev-3 {
+            height: 300px;
+            width: 300px;
+        }
+    }
+}
+

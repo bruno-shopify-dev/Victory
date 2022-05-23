@@ -22,8 +22,11 @@
   },
   "devDependencies": {
     "gulp": "^4.0.2",
+    "gulp-babel-minify": "^0.5.2",
+    "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^5.1.0",
-    "gulp-scss-combine": "^1.0.0"
+    "gulp-scss-combine": "^1.0.0",
+    "gulp-sourcemaps": "^3.0.0"
   }
 }
