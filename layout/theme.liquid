@@ -51,6 +51,11 @@
   {{ content_for_header }} <!-- Header hook for plugins -->
   <!-- {{ 'application.css' | asset_url | stylesheet_tag }} -->
 
+  <!-- CSS -->
+  {{ 'style-minicart.css' | asset_url | stylesheet_tag }}
+  {{ 'production.css' | asset_url | stylesheet_tag }}
+  <!-- ./CSS -->
+
   <style>
     .flex {
       display: flex;
@@ -64,8 +69,29 @@
     .f-justify-center {
       justify-content: center;
     }
+    .f-justify-end {
+      justify-content: flex-end;
+    }
     .f-align-center {
-      align-content: center;
+      align-items: center;
+    }
+    .f-align-end {
+      align-items: flex-end;
+    }
+    .f-1 {
+      flex: 1 !important;
+    }
+    .f-2 {
+      flex: 2 !important;
+    }
+    .f-3 {
+      flex: 3 !important;
+    }
+    .f-4 {
+      flex: 4 !important;
+    }
+    .f-5 {
+      flex: 5 !important;
     }
 
     .red { background-color: red; }
