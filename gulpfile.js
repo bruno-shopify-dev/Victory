@@ -11,6 +11,8 @@ const combine = require('gulp-scss-combine');
 const concat = require('gulp-concat');
 const sourcemaps = require('gulp-sourcemaps');
 const cleanCSS = require('gulp-clean-css');
+const terser = require('gulp-terser');
+const rename = require("gulp-rename");
 
 task('join-scss', series(
     function () {
@@ -24,7 +26,18 @@ task('join-scss', series(
     }
 ))
 
-task('watch', series(
+task('join-js', series(
+    function () {
+        return src('_files/js/*.js')
+            .pipe(sourcemaps.init())
+            .pipe(concat('production.js'))
+            .pipe(terser())
+            .pipe(sourcemaps.write('.', {addComment: false}))
+            .pipe(dest('assets'))
+    }
+))
+
+task('watch-scss', series(
     function () {
         watch(
             [
@@ -35,4 +48,18 @@ task('watch', series(
     }
 ))
 
-exports.build = series(['join-scss', 'watch']);
+task('watch-js', series(
+    function () {
+        watch(
+            [
+                '_files/js/*.js'
+            ],
+            parallel('join-js')
+        )
+    }
+))
+
+exports.build = series(
+    parallel(['join-scss', 'join-js']), 
+    parallel(['watch-scss', 'watch-js'])
+);
