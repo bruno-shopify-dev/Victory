@@ -18,9 +18,17 @@
   },
   "homepage": "https://github.com/bruno-shopify-dev/Victory#readme",
   "dependencies": {
+    "bootstrap": "^5.2.0-beta1",
     "sass": "^1.52.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.0",
     "gulp": "^4.0.2",
     "gulp-babel-minify": "^0.5.2",
     "gulp-clean-css": "^4.3.0",
@@ -29,6 +37,15 @@
     "gulp-sass": "^5.1.0",
     "gulp-scss-combine": "^1.0.0",
     "gulp-sourcemaps": "^3.0.0",
-    "gulp-terser": "^2.1.0"
+    "gulp-terser": "^2.1.0",
+    "gulp-uglify": "^3.0.2",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "vinyl-sourcemaps-apply": "^0.2.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }
