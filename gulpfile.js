@@ -21,7 +21,7 @@ task('join-scss', series(
             .pipe(concat('production.scss'))
             .pipe(sass())
             .pipe(cleanCSS())
-            .pipe(sourcemaps.write())
+            .pipe(sourcemaps.write('.', {addComment: false}))
             .pipe(dest('assets'))
     }
 ))
